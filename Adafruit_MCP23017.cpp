@@ -11,14 +11,7 @@
  BSD license, all text above must be included in any redistribution
  ****************************************************/
 
-#ifdef __AVR_ATtiny85__
-  #include <TinyWireM.h>
-  #define Wire TinyWireM
-#else
-  #include <Wire.h>
-#endif
-
-
+#include <Wire.h>
 #ifdef __AVR
   #include <avr/pgmspace.h>
 #elif defined(ESP8266)
@@ -286,6 +279,81 @@ uint8_t Adafruit_MCP23017::getLastInterruptPinValue(){
 	}
 
 	return MCP23017_INT_ERR;
+}
+
+//===> MCP23017 Status <------------------------------------------
+
+void Adafruit_MCP23017::status(String Bank) {
+int REG_ADD;
+  Serial.println("");
+  if (Bank == "A") {
+    Serial.println("Port A --------------------------");
+    REG_ADD = 0;
+  }
+  else {
+    Serial.println("Port B --------------------------");
+    REG_ADD = 1;
+  }
+  
+  Serial.println("Datenrichtungsregister");
+  Serial.print("IODIR   | ");
+  Serial.println(readRegister(MCP23017_IODIRA+REG_ADD), BIN);
+  Serial.println("----------------------------------");
+  Serial.println("INPUT Polaritaet");
+  Serial.print("IPOL    | ");
+  Serial.println(readRegister(MCP23017_IPOLA+REG_ADD), BIN);
+  Serial.println("----------------------------------");
+  Serial.println("PullUp");
+  Serial.print("GPPU    | ");
+  Serial.println(readRegister(MCP23017_GPPUA+REG_ADD), BIN);
+  Serial.println("----------------------------------");
+  Serial.println("Interrupt ENABLE");
+  Serial.print("GPINTEN | ");
+  Serial.println(readRegister(MCP23017_GPINTENA+REG_ADD), BIN);
+  Serial.println("----------------------------------");
+  Serial.println("Interrupt Vorgabewert");
+  Serial.print("DEFVAL  | ");
+  Serial.println(readRegister(MCP23017_DEFVALA+REG_ADD), BIN);
+  Serial.println("----------------------------------");
+  Serial.println("Interrupt Vergleichsverfahren | 1=use DEFVAL; 0=PIN on change");
+  Serial.print("INTCON  | ");
+  Serial.println(readRegister(MCP23017_INTCONA+REG_ADD), BIN);
+  Serial.println("----------------------------------");
+  Serial.println("Interrupt ausgeloest");
+  Serial.print("INTF    | ");
+  Serial.println(readRegister(MCP23017_INTFA+REG_ADD), BIN);
+  Serial.println("----------------------------------");
+  Serial.println("GPIO waehrend Interrupt");
+  Serial.print("INTCAP  | ");
+  Serial.println(readRegister(MCP23017_INTCAPA+REG_ADD), BIN);
+  Serial.println("----------------------------------");
+  Serial.println("Portleitungen");
+  Serial.print("GPIO    | ");
+  Serial.println(readRegister(MCP23017_GPIOA+REG_ADD), BIN);
+  Serial.println("----------------------------------");
+  Serial.println("OutputLatch");
+  Serial.print("OLAT    | ");
+  Serial.println(readRegister(MCP23017_OLATA+REG_ADD), BIN);
+  Serial.println("----------------------------------");
+  Serial.println("Konfigurationsregister | 7=BANK | 6=MIRROR | 2=openDrain | 1=INT Pol");
+  Serial.print("IOCON   | ");
+  Serial.println(readRegister(MCP23017_IOCONA+REG_ADD), BIN);
+  Serial.println("----------------------------------");
+
+/*
+#define MCP23017_IODIRB 0x01
+#define MCP23017_IPOLB 0x03
+#define MCP23017_GPINTENB 0x05
+#define MCP23017_DEFVALB 0x07
+#define MCP23017_INTCONB 0x09
+#define MCP23017_IOCONB 0x0B
+#define MCP23017_GPPUB 0x0D
+#define MCP23017_INTFB 0x0F
+#define MCP23017_INTCAPB 0x11
+#define MCP23017_GPIOB 0x13
+#define MCP23017_OLATB 0x15
+*/
+    
 }
 
 

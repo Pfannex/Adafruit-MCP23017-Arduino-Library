@@ -15,12 +15,6 @@
 #define _Adafruit_MCP23017_H_
 
 // Don't forget the Wire library
-#ifdef __AVR_ATtiny85__
-#include <TinyWireM.h>
-#else
-#include <Wire.h>
-#endif
-
 class Adafruit_MCP23017 {
 public:
   void begin(uint8_t addr);
@@ -39,15 +33,16 @@ public:
   void setupInterruptPin(uint8_t p, uint8_t mode);
   uint8_t getLastInterruptPin();
   uint8_t getLastInterruptPinValue();
-
+  uint8_t readRegister(uint8_t addr);
+  void writeRegister(uint8_t addr, uint8_t value);
+  void status(String Bank);
+  
  private:
   uint8_t i2caddr;
 
   uint8_t bitForPin(uint8_t pin);
   uint8_t regForPin(uint8_t pin, uint8_t portAaddr, uint8_t portBaddr);
 
-  uint8_t readRegister(uint8_t addr);
-  void writeRegister(uint8_t addr, uint8_t value);
 
   /**
    * Utility private method to update a register associated with a pin (whether port A/B)
